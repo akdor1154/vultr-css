@@ -10,7 +10,6 @@ builders:
     ssh_username: root
     state_timeout: 15m
 
-
 provisioners:
   - type: shell
     script: instance-scripts/01-install.sh
@@ -28,11 +27,6 @@ provisioners:
 
   - type: shell
     script: instance-scripts/03-install-steamcmd.sh
-  
-  - type: shell
-    inline: systemctl reboot
-    expect_disconnect: true
-    pause_after: 10s
 
   - type: file
     source: instance-files/DataSourceVultr.py
@@ -41,14 +35,22 @@ provisioners:
   - type: file
     source: instance-files/99_vultr.cfg
     destination: /etc/cloud/cloud.cfg.d/99_vultr.cfg
+  
+  - type: shell
+    inline: |
+      set -e
+      sed -ie 's/Port .*//' /etc/ssh/sshd_config
+      echo "Port 6422" >> /etc/ssh/sshd_config
 
   - type: shell
     inline: |
+      set -e
       cloud-init clean -s -l
       systemctl enable cloud-init
       systemctl enable cloud-config
       systemctl enable cloud-final
 
+post-processors:
   - type: manifest
     output: manifest.json
   

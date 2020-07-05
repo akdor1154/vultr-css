@@ -9,3 +9,8 @@ export $(cat ../ENVIRONMENT)
 
 packer validate packer.tmp.json
 packer build "$@" packer.tmp.json 
+
+SNAPSHOT_ID=$(./util/getManifest.py < manifest.json)
+cat > ../snapshot.tfvars <<EOF
+css_snapshot_id="${SNAPSHOT_ID}"
+EOF

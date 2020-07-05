@@ -23,12 +23,9 @@ resource "vultr_server" "css_server" {
     ssh_key_ids = var.ssh_key_ids
     enable_ipv6 = true
     user_data = <<EOCC
-# cloud-config
+#cloud-config
 users:
-  - name: admin
-    groups:
-      - users
-        sudo
+  - default
 write_files:
   - path: /opt/css/cstrike/cfg/server.cfg
     owner: steam:steam
@@ -80,6 +77,10 @@ write_files:
 
 
 EOCC
+}
+
+output "server_ip" {
+    value="${vultr_server.css_server.main_ip}"
 }
 
 terraform {

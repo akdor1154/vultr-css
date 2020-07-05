@@ -1,12 +1,16 @@
 package_upgrade: true
 
-ssh_deletekeys: false
+ssh_deletekeys: true
+ssh_pwauth: false
 
 packages:
   - lib32stdc++6
   - expect
 
+disable_root: true
+
 users:
+  - default
   - name: steam
     gecos: Steam / Source User
 
@@ -18,19 +22,24 @@ write_files:
 
       [Service]
       Type=simple
+      ExecStartPre=cloud-init status --long --wait
       ExecStart=\
         /opt/css/srcds_run \
         -game cstrike \
         -console \
+        -usercon \
         -steam \
         -port 27015 \
-        -steam_dir /opt/steam \
+        -steam_dir /opt/steamcmd \
         -steamcmd_script /opt/css/updatescript \
         +sv_lan 0 \
         +map de_dust2 \
         +maxplayers 9
       User=steam
       Group=steam
+      StandardOutput=journal+console
+      StandardError=journal+console
+      PermissionsStartOnly=false
 
       [Install]
       WantedBy=multi-user.target
