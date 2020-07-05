@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+mkdir -p bin
+
 (
     cd bin
     curl -fL https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip -o packer.zip
