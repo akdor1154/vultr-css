@@ -19,6 +19,7 @@ write_files:
     content: |
       [Unit]
       Description=Counter-Strike Source Service.
+      After=network-online.target
 
       [Service]
       Type=simple
@@ -40,6 +41,8 @@ write_files:
       StandardOutput=journal+console
       StandardError=journal+console
       PermissionsStartOnly=false
+      RestartSec=30s
+      Restart=always
 
       [Install]
       WantedBy=multi-user.target
